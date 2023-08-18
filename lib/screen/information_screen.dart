@@ -90,7 +90,7 @@ class _Inforscreen extends State<Inforscreen> {
         ),
       );
     }
-    if(widget.user.user_inventory.isNotEmpty){
+    if (widget.user.user_inventory.isNotEmpty) {
       for (String name in widget.user.user_inventory.keys) {
         inventory[name] = Container(
           height: 50,
@@ -130,10 +130,9 @@ class _Inforscreen extends State<Inforscreen> {
           ),
         );
       }
-    }else{
-      inventory[''] =Container();
+    } else {
+      inventory[''] = Container();
     }
-
   }
 
   void invalid_widget() {
@@ -258,11 +257,9 @@ class _Inforscreen extends State<Inforscreen> {
                         width: MediaQuery.of(context).size.width / 3,
                         height: MediaQuery.of(context).size.height * 0.95,
                         decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('asset/image/level_back.png'),
-                            fit: BoxFit.fitWidth
-                          )
-                        ),
+                            image: DecorationImage(
+                                image: AssetImage('asset/image/level_back.png'),
+                                fit: BoxFit.fitWidth)),
                         child: Column(
                           children: [
                             Image.asset(
@@ -273,120 +270,121 @@ class _Inforscreen extends State<Inforscreen> {
                               width: MediaQuery.of(context).size.width / 3.1,
                               height: MediaQuery.of(context).size.height * 0.32,
                               decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('asset/image/souls_info.png'),
-                                  fit: BoxFit.fitWidth
-                                )
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'asset/image/souls_info.png'),
+                                      fit: BoxFit.fitWidth)),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 20.0, top: 2),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${souls_name[Name]}',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                          decoration: TextDecoration.none),
+                                    ),
+                                    Text(
+                                      '레벨 : ${widget.user.user_souls['${Name}']}',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                          decoration: TextDecoration.none),
+                                    ),
+                                    Text(
+                                      '레벨 업에 필요한 영혼 : ${max_exp}',
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.grey,
+                                          decoration: TextDecoration.none),
+                                    ),
+                                    Container(
+                                      width:
+                                          MediaQuery.of(context).size.width / 8,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              8.5,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (widget.user.user_inventory
+                                              .containsKey(Name)) {
+                                            if (widget.user .user_inventory[Name]! >(5 +(widget.user.user_souls['${Name}']! -1) * 4) &&
+                                                widget.user.user_souls['$Name']! <10) {
+                                              setState(() {
+                                                widget.user.user_inventory['$Name'] =
+                                                    (widget.user.user_inventory['$Name'] ??0) -(5 +(widget.user.user_souls['${Name}']! -1) *4);
+                                                widget.user.user_souls['${Name}'] =(widget.user.user_souls['${Name}'] ??0) +1;
+                                                if (widget.user .user_souls[Name]! <10) { max_exp = (5 +(widget.user.user_souls[Name]! -1) *4);
+                                                } else {
+                                                  max_exp = '최대 레벨에 도달했습니다.';
+                                                }
+                                                if (widget.user.user_inventory[Name] == 0) {
+                                                  widget.user.user_inventory.remove(Name);
+                                                }
+                                                messege_success = true;
+                                                showWidget();
+                                                Timer(Duration(seconds: 1), () {
+                                                  setState(() {
+                                                    messege_success = false;
+                                                  });
+                                                });
+                                                setState(() async {
+                                                  await saveData
+                                                      .save_data(widget.user);
+                                                });
+                                              });
+                                            } else {
+                                              setState(() {
+                                                messege_false = true;
+                                                Timer(Duration(seconds: 1), () {
+                                                  setState(() {
+                                                    messege_false = false;
+                                                  });
+                                                });
+                                              });
+                                            }
+                                          } else {
+                                            setState(() {
+                                              messege_false = true;
+                                              Timer(Duration(seconds: 1), () {
+                                                setState(() {
+                                                  messege_false = false;
+                                                });
+                                              });
+                                            });
+                                          }
+                                        },
+                                        child: Image.asset(
+                                          'asset/image/level_up_button.png',
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                    ),
+                                    Stack(
+                                      children: [
+                                        messege_false
+                                            ? Text(
+                                                '성장에 필요한 영혼이 부족합니다.',
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 10),
+                                              )
+                                            : Text(''),
+                                        messege_success
+                                            ? Text(
+                                                level_string,
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 10),
+                                              )
+                                            : Text(''),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
-                              child: 
-                              Padding(
-    padding: EdgeInsets.only(left: 20.0,top: 2),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${souls_name[Name]}',
-          style: TextStyle(
-              fontSize: 15,
-              color: Colors.black,
-              decoration: TextDecoration.none),
-        ),
-        Text(
-          '레벨 : ${widget.user.user_souls['${Name}']}',
-          style: TextStyle(
-              fontSize: 15,
-              color: Colors.black,
-              decoration: TextDecoration.none),
-        ),
-        Text(
-          '레벨 업에 필요한 영혼 : ${max_exp}',
-          style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey,
-              decoration: TextDecoration.none),
-        ),
-        Container(
-          width:
-          MediaQuery.of(context).size.width / 8,
-          height: MediaQuery.of(context).size.height /
-              8.5,
-          child: GestureDetector(
-            onTap: () {
-              if(widget.user.user_inventory.containsKey(Name)){
-                if (widget.user.user_inventory[Name]! > (5 +(widget.user.user_souls['${Name}']! - 1) *4) && widget.user.user_souls['$Name']! <10) {
-                  setState(() {
-                    widget.user.user_inventory['$Name'] = (widget.user.user_inventory['$Name'] ?? 0) - (5 +(widget.user.user_souls['${Name}']! - 1) *4);
-                    widget.user.user_souls['${Name}'] = (widget.user.user_souls['${Name}'] ?? 0) + 1;
-                    if (widget.user.user_souls[Name]! < 10) {
-                      max_exp = (5 + (widget.user.user_souls[Name]! - 1) * 4);
-                    } else {
-                      max_exp = '최대 레벨에 도달했습니다.';
-                    }
-                    if( widget.user.user_inventory[Name] == 0){
-                      widget.user.user_inventory.remove(Name);
-                    }
-                    messege_success = true;
-                  showWidget();
-                    Timer(Duration(seconds: 1),(){
-                      setState(() {
-                        messege_success = false;
-                      });
-                    });
-                    setState(() async{
-                      await saveData.save_data(widget.user);
-                    });
-                  });
-                }else {
-                  setState(() {
-                    messege_false = true;
-                    Timer(Duration(seconds: 1), () {
-                      setState(() {
-                        messege_false = false;
-                      });
-                    });
-                  });
-                }
-              }
-              else {
-                setState(() {
-                  messege_false = true;
-                  Timer(Duration(seconds: 1), () {
-                    setState(() {
-                      messege_false = false;
-                    });
-                  });
-                });
-              }
-            },
-            child: Image.asset(
-              'asset/image/level_up_button.png',
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        Stack(
-          children: [
-            messege_false
-                ? Text(
-              '성장에 필요한 영혼이 부족합니다.',
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 10),
-            )
-                : Text(''),
-            messege_success
-                ? Text(
-              level_string,
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 10),
-            )
-                : Text(''),
-          ],
-        )
-      ],
-    ),
-    ),
                             )
                           ],
                         )),
@@ -448,8 +446,7 @@ class _Inforscreen extends State<Inforscreen> {
                               Container(
                                 width: MediaQuery.of(context).size.width / 12,
                                 height: MediaQuery.of(context).size.height / 4,
-                                child: Image.asset(
-                                    'asset/image/item_nomal.png',
+                                child: Image.asset('asset/image/item_nomal.png',
                                     fit: BoxFit.fill),
                               ),
                             ],
@@ -561,20 +558,20 @@ class _Inforscreen extends State<Inforscreen> {
                                         (widget.user.user_inventory['nomal'] ??
                                                 0) +
                                             item_amount * 8;
-                                    if(widget.user.user_inventory[Name] == 0){
+                                    if (widget.user.user_inventory[Name] == 0) {
                                       widget.user.user_inventory.remove(Name);
                                       inventory.remove(Name);
                                     }
                                     inventory.clear();
-                                  showWidget();
+                                    showWidget();
                                   });
-                                    success_bool = true;
+                                  success_bool = true;
                                   Timer(Duration(seconds: 1), () {
                                     setState(() {
                                       success_bool = false;
                                     });
                                   });
-                                  setState(() async{
+                                  setState(() async {
                                     await saveData.save_data(widget.user);
                                   });
                                 }
